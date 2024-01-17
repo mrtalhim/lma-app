@@ -14,5 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/jquery', [LmaController::class, 'show_jquery']);
 Route::get('/', [LmaController::class, 'show']);
 Route::post('/', [LmaController::class, 'store']);

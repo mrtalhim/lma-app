@@ -10,6 +10,10 @@ class LmaController extends Controller
         return view('index',);
     }
     
+    public function show_jquery(Request $request) {
+        return view('jquery',);
+    }
+
     public function store(Request $request) {
         return view('index', [
             'penghasilan' => $request->input('penghasilan'),
