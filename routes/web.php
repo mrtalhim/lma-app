@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [LmaController::class, 'show']);
+Route::post('/', [LmaController::class, 'store']);

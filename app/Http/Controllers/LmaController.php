@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
-// use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 
 class LmaController extends Controller
 {
-    public function show() {
-        return view('index');
+    public function show(Request $request) {
+        return view('index',);
+    }
+    
+    public function store(Request $request) {
+        return view('index', [
+            'penghasilan' => $request->input('penghasilan'),
+            'wasiyatType' => $request->input('wasiyatType')
+        ]);
     }
 }
