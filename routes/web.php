@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LmaController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +15,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/jquery', [LmaController::class, 'show_jquery']);
-// Route::get('/', [LmaController::class, 'show']);
-Route::get('/', [LmaController::class, 'show_jquery']);
-// Route::post('/', [LmaController::class, 'store']);
+Route::get('/', [LmaController::class, 'show']);

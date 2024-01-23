@@ -6,11 +6,10 @@ use Illuminate\Http\Request;
 
 class LmaController extends Controller
 {
-    public function show(Request $request) {
-        return view('index',);
+    public function index(Request $request) {
+        return view('jquery',);
     }
-    
-    public function show_jquery(Request $request) {
+    public function show(Request $request) {
         return view('jquery',);
     }
 
