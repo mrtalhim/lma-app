@@ -46,7 +46,7 @@
                 <span x-text="Math.max(anggaran / 100, 7500)"></span>
                 <span class="font-bold">Ijtima Badan</span>
                 <span x-text="anggaran / 480"></span> --}}
-                <h1>{{ $penghasilan }}</h1>
+                {{-- <h1>{{ $penghasilan }}</h1> --}}
                 @if (!empty($penghasilan) && !empty($wasiyatType))
                     <span class="font-bold">Candah Aam</span>
                     <span x-mask:dynamic="$money($input, ',', '.')">{{ $penghasilan * $wasiyatType }}</span>

@@ -13,22 +13,22 @@
         <form class="flex flex-col place-content-center gap-4">
             <h1 class="font-bold text-3xl basis-full">Anggaran Penerimaan Perorangan</h1>
             <div class="flex flex-col">
-                <span class="font-bold">Badan</span>
+                <span class="font-bold flex flex-row">Badan<h1 class="text-red-700">*</h1></span>
                 <select id="badan">
-                    <option disabled selected>Pilih Badan</option>
+                    <option disabled selected>Pilih Badan </option>
                     <option value="Khuddam">Khuddam</option>
                     <option value="Ansharullah">Ansharullah</option>
                     <option value="Lajnah">Lajnah Imailah</option>
                 </select>
             </div>
-            <div class="flex flex-col">
-                <span class="font-bold">Status Wasiyat</span>
-                <ul class="flex flex-row flex-wrap">
-                    <li class="basis-1/3">
+            <div class="flex flex-wrap">
+                <span class="font-bold basis-full flex flex-row">Status Wasiyat<h1 class="text-red-700">*</h1></span>
+                <ul class="flex flex-wrap basis-full *:basis-1/3">
+                    <li>
                         <input type="radio" name="isWasiyat" id="musiType1" value="0" class="peer" checked>
                         <label for="musiType1">Non-Musi</label>
                     </li>
-                    <li class="basis-1/3">
+                    <li>
                         <input type="radio" name="isWasiyat" id="musiType2" value="1" class="peer">
                         <label for="musiType2">Musi-Musiah</label>
                     </li>
@@ -40,46 +40,40 @@
                 </ul>
             </div>
             <div class="flex flex-col">
-                <span class="font-bold m-4">Jumlah Penghasilan Satu Tahun</span>
-                <div class="flex flex-row gap-4">
-                    <h1 class="m-2 p-2">Rp.</h1>
-                    <input id="penghasilan" placeholder="Masukkan Jumlah Penghasilan" class="basis-full">
+                <span class="font-bold flex flex-row">Jumlah Penghasilan Satu Tahun<h1 class="text-red-700">*</h1></span>
+                <div class="flex flex-row gap-4 mt-2 rounded-xl ring-2 ring-gray-400 has-[:focus]:ring-blue-400">
+                    <h1 class="p-2">Rp.</h1>
+                    <input type="number" id="penghasilan" placeholder="Masukkan Jumlah Penghasilan" class="basis-full mr-2 focus:outline-0">
                 </div>
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col" id="div-aam">
                 <span class="font-bold">Candah Aam</span>
                 <div class="flex flex-row gap-4">
-                    <h1 class="m-2 p-2">Rp.</h1>
-                    <span id="aam"></span>
+                        <h1>Rp.</h1>
+                        <span id="aam"></span>
+                    </div>
                 </div>
-            </div>
-            <div class="flex flex-col">
-                <span class="font-bold">Jalsah</span>
-                <div class="flex flex-row gap-4">
-                    <h1 class="m-2 p-2">Rp.</h1>
-                    <span id="jalsah"></span>
+                <div class="flex flex-col" id="div-jalsah">
+                    <span class="font-bold">Jalsah</span>
+                    <div class="flex flex-row gap-4">
+                        <h1>Rp.</h1>
+                        <span id="jalsah"></span>
+                    </div>
                 </div>
-            </div>
-            <div class="flex flex-col">
-                <span id="iuranTitle" class="font-bold">Iuran Badan</span>
-                <div class="flex flex-row gap-4">
-                    <h1 class="m-2 p-2">Rp.</h1>
-                    <span id="iuran"></span>
+                <div class="flex flex-col" id="div-iuran">
+                    <span id="iuranTitle" class="font-bold">Iuran Badan</span>
+                    <div class="flex flex-row gap-4">
+                        <h1>Rp.</h1>
+                        <span id="iuran"></span>
+                    </div>
                 </div>
-            </div>
-            <div class="flex flex-col">
-
-                <span id="ijtimaTitle" class="font-bold">Ijtima Badan</span>
-                <div class="flex flex-row gap-4">
-                    <h1 class="m-2 p-2">Rp.</h1>
-                    <span id="ijtima"></span>
+                <div class="flex flex-col" id="div-ijtima">
+                    <span id="ijtimaTitle" class="font-bold">Ijtima Badan</span>
+                    <div class="flex flex-row gap-4">
+                        <h1>Rp.</h1>
+                        <span id="ijtima"></span>
+                    </div>
                 </div>
-            </div>
-            <div class="flex flex-col">
-                {{-- <span id="penghasilanOutput"></span>
-                <span id="wasiyatTypeOutput"></span>
-                <span id="ijtimaOutput"></span>
-                <span id="isWasiyatOutput"></span> --}}
             </div>
         </form>
     </div>
@@ -111,15 +105,21 @@
             wasiyatMult = 1/16;
         }
 
-        ijtimaMult = badanType[$('#badan').val()];
+        badanTitle = $('#badan').val() || "Badan";
+        ijtimaMult = badanType[badanTitle] || 0;
+
+        // check if all is filled
+        if ((ijtimaMult != 0) && (number != 0)) {
+            $("#div-aam, #div-jalsah, #div-iuran, #div-ijtima").show();
+        }
 
         // set number output
         $("#aam").text(number * wasiyatMult);
         $("#jalsah").text(Math.round(number / 120));
         $("#iuran").text(Math.max(number / 100, 7500));
         $("#ijtima").text(number * ijtimaMult);
-        $("#iuranTitle").text('Iuran ' + $('#badan').val());
-        $("#ijtimaTitle").text('Ijtima ' + $('#badan').val());
+        $("#iuranTitle").text('Iuran ' + badanTitle);
+        $("#ijtimaTitle").text('Ijtima ' + badanTitle);
         // $("#penghasilanOutput").text(number);
         // $("#wasiyatTypeOutput").text(wasiyatMult);
         // $("#ijtimaOutput").text(ijtimaMult);
@@ -131,14 +131,11 @@
         calculate();
     });
     $("#penghasilan").on("input", calculate);
-    $("#wasiyatType").on("change", calculate);
-    $("#badan").on("change", calculate);
+    $("#wasiyatType, #badan").on("change", calculate);
 
     $(document).ready(function () {
-        $("#aam").text(0);
-        $("#jalsah").text(0);
-        $("#iuran").text(0);
-        $("#ijtima").text(0);
+        // $("#div-aam, #div-jalsah, #div-iuran, #div-ijtima").hide();
+        $("#aam, #jalsah, #iuran, #ijtima").text(0);
     });
 </script>
 
