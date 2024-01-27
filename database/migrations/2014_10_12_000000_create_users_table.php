@@ -12,12 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->id()->autoIncrement();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->integer('aims')->unique();
+            $table->string('cabang');
+            $table->enum('type', ['user', 'admin'])->default('user');
+            $table->string('badan');
+            $table->boolean('is_musi')->default(false);
+            $table->float('wasiyat_type', 4, 3)->default(1/16);
+            $table->integer('pendapatan_value')->default(0);
+            $table->integer('candah_value')->default(0);
+            $table->integer('jalsah_value')->default(0);
+            $table->integer('iuran_badan_value')->default(0);
+            $table->integer('ijtima_badan_value')->default(0);
             $table->timestamps();
         });
     }

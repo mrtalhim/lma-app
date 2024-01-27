@@ -3,13 +3,11 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
-class UserFactory extends Factory
+class UserModelFactory extends Factory
 {
 
     /**
@@ -21,7 +19,7 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'aims' => $this->faker->randomNumber(5, true),
+            'aims' => fake()->unique()->safeEmail(),
             'badan' => $this->faker->randomElement([
                 'Khuddam',
                 'Lajnah',
@@ -37,6 +35,14 @@ class UserFactory extends Factory
                 'Tasikmalaya',
                 'Bandung Tengah'
             ]),
+            'is_musi' => $this->faker->randomElement([0,1]),
+            'wasiyat_type' => function ($faker, $model) {
+                if (!$model->is_musi) {
+                    return 1/16;
+                }
+
+                return $faker->randomElement([1/3, 1/5, 1/10]);
+            },
 
         ];
     }
