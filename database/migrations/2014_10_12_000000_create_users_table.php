@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('type', ['user', 'admin'])->default('user');
             $table->string('badan');
             $table->boolean('is_musi')->default(false);
-            $table->float('wasiyat_type', 4, 3)->default(1/16);
+            $table->enum('wasiyat_type',[0,1,2,3])->default(0);
             $table->integer('pendapatan_value')->default(0);
             $table->integer('candah_value')->default(0);
             $table->integer('jalsah_value')->default(0);

@@ -38,10 +38,10 @@ class UserModelFactory extends Factory
             'is_musi' => $this->faker->randomElement([0,1]),
             'wasiyat_type' => function ($faker, $model) {
                 if (!$model->is_musi) {
-                    return 1/16;
+                    return 0;
                 }
 
-                return $faker->randomElement([1/3, 1/5, 1/10]);
+                return $faker->randomElement([1,2,3]);
             },
 
         ];

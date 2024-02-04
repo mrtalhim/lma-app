@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LmaController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [LmaController::class, 'show']);
+Route::get('/', [LmaController::class, 'index'])->name('index');
+Route::post('/login', [LmaController::class, 'login'])->name('login');
+Route::get('/logout', [LmaController::class, 'logout'])->name('logout');
+Route::get('/edit/{id}', [LmaController::class, 'show'])->name('edit-app');
+Route::post('/edit/save', [LmaController::class, 'store'])->name('save-app');
+Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
