@@ -7,10 +7,13 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function index(Request $request) {
+    public function index() {
         if (session('user_type') != 'admin') {
             $data = User::where('id', session('user_id'))->get()->first();
-            return view('edit-app', compact('data'));
+            if (empty($data))
+                return redirect()->route('index');
+            else
+                return view('edit-app', ['id'=>$data]);
         }
         $users = User::get([
             'id',
@@ -23,12 +26,11 @@ class AdminController extends Controller
         return view('admin.index', compact('users'));
     }
 
-    public function show(Request $request) {
+    public function show($id) {
         if(session('user_id') != 'admin') {
-            return route('edit-app');
+            return redirect()->route('index');
         }
 
-        $id = $request->id;
         $data = User::where('id', $id)->get()->first();
 
         return view('jquery', 

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class LmaController extends Controller
 {
-    public function index(Request $request) {
+    public function index() {
         if (empty(session('user_id')))
             return view('index');
         else {
@@ -17,8 +17,7 @@ class LmaController extends Controller
         }
     }
     
-    public function show(Request $request) {
-        $id = $request->id;
+    public function show($id) {
         $data = User::where('id', $id)->get()->first();
 
         return view('jquery')->with('data', $data);
