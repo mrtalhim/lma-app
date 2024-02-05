@@ -4,23 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LmaController extends Controller
 {
     public function index() {
-        if (empty(session('user_id')))
+        if (empty(auth()->user()->id))
             return view('index');
-        else {
-            $id = session('user_id');
-            $data = User::where('id', $id)->get()->first();
-            return redirect()->route('edit-app', $data);
+        else {;
+            return redirect()->route('edit-app', auth()->user()->id);
         }
     }
     
-    public function show($id) {
-        $data = User::where('id', $id)->get()->first();
-
-        return view('jquery')->with('data', $data);
+    public function show($id, $message = '') {
+        if (auth()->user()->id == $id || auth()->user()->type == 'admin') {
+            $data = User::where('id', $id)->get()->first();
+    
+            return view('jquery', ['data'=>$data])
+            ->with('message', $message);
+        } else {
+            return redirect()->route('edit-app', ['id'=>auth()->user()->id])
+            ->with('message', 'Silakan mengubah informasi APP milik sendiri');
+        }
     }
 
     public function store(Request $request) {
@@ -56,7 +61,7 @@ class LmaController extends Controller
         
         $user->save();
 
-        return back()->with('message', 'tersimpan');
+        return back()->with('message', 'Data sudah tersimpan');
     }
 
     public function login(Request $request) {
@@ -66,45 +71,29 @@ class LmaController extends Controller
         $find_cabang = $request->cabang;
 
         if (empty($find_aims) || empty($find_badan) || empty($find_cabang)) {
-            return back();
+            return back()->with('message', 'User tidak ditemukan');
         }
         
         $result = User::where('aims', $find_aims)->where('badan', $find_badan)->where('cabang', $find_cabang)->get()->first(); 
         
-        $id = $result->id;
-        $aims = $result->aims;
-        $badan = $result->badan;
-        $cabang = $result->cabang;
-        $type = $result->type;
-
         if (!empty($result)) {
-            session([
-                'user_id'=>$id,
-                'user_aims'=>$aims,
-                'user_badan'=>$badan,
-                'user_cabang'=>$cabang,
-                'user_type'=>$type
-            ]);
+            auth()->login($result);
 
-            if(session('user_type') == 'user') {
+            if(auth()->user()->type == 'user') {
                 return redirect()->route('edit-app', $result);
-            } else if(session('user_type') == 'admin') {
-                return view('result', compact('aims', 'badan', 'cabang', 'result', 'id'));
+            } else if(auth()->user()->type == 'admin') {
+                return view('result');
             }
 
         }
         else
-            return back();
+            return back()->with('message', 'User tidak ditemukan');
     }
 
     public function logout() {
-        session()->forget([
-            'user_id',
-            'user_aims',
-            'user_badan',
-            'user_cabang',
-            'user_type'
-        ]);
+
+        Auth::logout();
+
         return redirect()->route('index');
     }
 }
