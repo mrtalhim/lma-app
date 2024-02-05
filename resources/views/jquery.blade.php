@@ -22,15 +22,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        @vite(['resources/scss/app.scss', 'resources/js/app.js'])
+                @vite(['resources/scss/app.scss', 'resources/js/app.js'])
         <title>Anggaran Penerimaan Perorangan</title>
     </head>
     <body>
         <div class="container d-flex align-items-center justify-content-center">
-            <form method="POST" action="{{ route('save-app', ['id'=>$data->id]) }}" class="d-flex flex-column mb-4">
+            <form method="POST" action="{{ route('save-app', ['id'=>$data->id]) }}" class="d-flex flex-column m-4">
                 @csrf
                 <h1>Anggaran Penerimaan Perorangan</h1>
-                <h2>{{ $message ?? '' }}</h2>
+                @session('message')
+                    <div class="alert alert-primary mt-2 mb-0">
+                        {{ $value }}
+                    </div>
+                @endsession
                 <span class="d-flex flex-row form-label">Nama</span>
                 <input name="name" id="name" disabled value="{{ $data->name }}" class="form-control">
                 <span class="d-flex flex-row form-label">Cabang</span>
@@ -43,29 +47,22 @@
                     @endforeach
                 </select>
                 <span class="d-flex flex-row form-label">Status Wasiyat<span class="text-danger">*</span></span>
-                <ul class="d-flex flex-wrap list-unstyled gap-4">
-                    <li>
-                        <input type="radio" name="isWasiyat" id="musiType1" value="0" {{ $data->is_musi == 0 ? 'checked' : '' }}>
-                        <label for="musiType1">Non-Musi</label>
-                    </li>
-                    <li>
-                        <input type="radio" name="isWasiyat" id="musiType2" value="1" {{ $data->is_musi == 1 ? 'checked' : '' }}>
-                        <label for="musiType2">Musi-Musiah</label>
-                    </li>
-                    <li>
-                        
-                        <select name="wasiyatType" id="wasiyatType" class="form-select">
-                            @foreach ($wasiyat_list as $k=>$v)
-                                <option value="{{ $v }}" {{ $data->wasiyat_type == $v ? "selected" : "" }}>{{ $k }}</option>
-                            @endforeach
-                        </select>
-                    </li>
-                </ul>
+                <div class="d-flex flex-wrap gap-4 row-gap-2">
+                    <input type="radio" name="isWasiyat" id="musiType1" value="0" {{ $data->is_musi == 0 ? 'checked' : '' }}>
+                    <label for="musiType1">Non-Musi</label>
+                    <input type="radio" name="isWasiyat" id="musiType2" value="1" {{ $data->is_musi == 1 ? 'checked' : '' }}>
+                    <label for="musiType2">Musi-Musiah</label>
+                    <select name="wasiyatType" id="wasiyatType" class="form-select">
+                        @foreach ($wasiyat_list as $k=>$v)
+                            <option value="{{ $v }}" {{ $data->wasiyat_type == $v ? "selected" : "" }}>{{ $k }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="d-flex flex-column">
                     <span class="d-flex flex-row form-label">Jumlah Penghasilan Satu Tahun<span class="text-danger">*</span></span>
                     <div class="d-flex flex-row input-group">
                         <span class="input-group-text">Rp.</span>
-                        <input type="number" name="penghasilan" id="penghasilan" placeholder="Masukkan Jumlah Penghasilan" class="form-control" value="{{ $data->pendapatan_value }}">
+                        <input type="text" name="penghasilan" id="penghasilan" placeholder="Masukkan Jumlah Penghasilan" class="form-control" value="{{ $data->pendapatan_value }}">
                     </div>
                 </div>
                 <div class="d-flex flex-column" id="div-aam">
@@ -98,7 +95,7 @@
                 </div>
                 <div class="d-flex flex-row gap-4 justify-content-center p-8">
                     <button type="submit" class="btn btn-primary">Simpan</button>
-                    @if (session('user_type') == 'admin')
+                    @if (auth()->user()->type == 'admin')
                         <a href="{{ route('dashboard') }}" class="btn btn-secondary">Kembali</a>
                     @endif
                     <a href="{{ route('logout') }}" class="btn btn-secondary">Keluar</a>
@@ -168,9 +165,9 @@
         });
         $("#penghasilan").on("input", calculate);
         $("#wasiyatType, #badan").on("change", calculate);
-
+        
         $(document).ready(function () {
-            if (isWasiyat()) {
+                        if (isWasiyat()) {
                 $("#wasiyatType").show();
             } else {
                 $("#wasiyatType").hide();

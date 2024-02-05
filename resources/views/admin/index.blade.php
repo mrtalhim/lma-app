@@ -1,7 +1,7 @@
 @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 
-<div class="card">
-    <div class="d-flex justify-content-center">
+<div class="m-4">
+    <div class="d-flex justify-content-center m-4">
         <a href="{{ route('logout') }}" class="btn btn-primary">Keluar</a>
     </div>
     <table class="table">

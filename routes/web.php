@@ -18,7 +18,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LmaController::class, 'index'])->name('index');
 Route::post('/login', [LmaController::class, 'login'])->name('login');
-Route::get('/logout', [LmaController::class, 'logout'])->name('logout');
-Route::get('/edit/{id}', [LmaController::class, 'show'])->name('edit-app');
-Route::post('/edit/save', [LmaController::class, 'store'])->name('save-app');
-Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+
+Route::group(['middleware'=>'auth'], function() {
+    Route::get('/logout', [LmaController::class, 'logout'])->name('logout');
+    Route::get('/edit/{id}', [LmaController::class, 'show'])->name('edit-app');
+    Route::post('/edit/save', [LmaController::class, 'store'])->name('save-app');
+    
+    Route::group(['middleware'=>'userType:admin'], function () {
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    });
+});
